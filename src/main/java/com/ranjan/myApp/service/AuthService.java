@@ -15,7 +15,6 @@ public class AuthService {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return "User already exists!";
         }
-//        userDatabase.put(user.getUsername(), user.getPassword());
         userRepository.save(user);
         return "Registration successful!";
     }
