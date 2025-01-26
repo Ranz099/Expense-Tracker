@@ -24,18 +24,19 @@ public class JournalEntryController {
 
 
     @PostMapping("/{username}")
-    public String addExpense(@PathVariable String username, @RequestBody Expense entry) {
+    public Expense addExpense(@PathVariable String username, @RequestBody Expense entry) {
         System.out.println(username);
+        if(entry.getTitle().isEmpty() || entry.getAmount() == 0 || entry.getCategory().isBlank())
+            return new Expense();
         User user = userRepository.findByUsername(username);
 //        System.out.println(user.toString());
         if (user == null) {
-            return "Username does not exist.";
+            return new Expense();
         }
         entry.setUser(user); // Associate the expense with the user
-        journalEntryRepository.save(entry);
-        return "Expense added successfully!";
+        Expense exp = journalEntryRepository.save(entry);
+        return exp;
     }
-
 
     @GetMapping("/{username}")
     public List<Expense> getExpenses(@PathVariable String username) {
@@ -81,7 +82,6 @@ public class JournalEntryController {
         journalEntryRepository.deleteById(id);
         return "deleted successfully";
     }
-
 }
 
 
